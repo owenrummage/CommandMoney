@@ -28,8 +28,16 @@ func main() {
 			// todo print information
 		},
 	}
+	var cmdTest = &cobra.Command{
+		Use:   "test",
+		Short: "balls",
+		Run: func(cmd *cobra.Command, args []string) {
+			getAllTransactions()
+		},
+	}
 
 	var rootCmd = &cobra.Command{Use: "money"}
-	rootCmd.AddCommand(cmdLog, cmdInfo)
+	rootCmd.AddCommand(cmdLog, cmdInfo, cmdTest)
+	InitDatastore()
 	rootCmd.Execute()
 }
