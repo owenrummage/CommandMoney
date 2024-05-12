@@ -11,7 +11,7 @@ import (
 func main() {
 
 	var cmdLog = &cobra.Command{
-		Use:                "log [operation a,s] [amount] [reason]",
+		Use:                "log [amount] [reason]",
 		Short:              "Log money coming in or out of the account",
 		Long:               `Logs the money coming in or out of your account with a reason listed.`,
 		Args:               cobra.RangeArgs(2, 2),
@@ -55,11 +55,12 @@ func main() {
 				}
 				totalBalance = totalBalance + element.Amount
 
-				transactionList += fmt.Sprintf("  {id: %s, amount: %d, reason: %s}\r\n", element.ID, element.Amount, element.Reason)
+				transactionList += fmt.Sprintf("  {id: \"%s\", amount: %d, reason: \"%s\"}\r\n", element.ID, element.Amount, element.Reason)
 
 			}
 
-			fmt.Printf(`##################
+			fmt.Printf(
+`##################
   COMMAND WALLET
 ##################
 
@@ -84,7 +85,7 @@ Transactions
 			transactions := getAllTransactions()
 
 			for index, element := range transactions {
-				fmt.Printf("Transaction %d: {id: %s, amount: %d, reason: %s}\r\n", index, element.ID, element.Amount, element.Reason)
+				fmt.Printf("Transaction %d: {id: \"%s\", amount: %d, reason: \"%s\"}\r\n", index, element.ID, element.Amount, element.Reason)
 			}
 		},
 	}
