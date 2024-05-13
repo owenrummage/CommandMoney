@@ -43,7 +43,6 @@ func main() {
 			var transDeposit int
 			var transWithdrawl int
 			var totalBalance int
-			var transactionList string
 
 			for index, element := range transactions {
 				_ = index
@@ -54,9 +53,6 @@ func main() {
 					transWithdrawl = transWithdrawl + 1
 				}
 				totalBalance = totalBalance + element.Amount
-
-				transactionList += fmt.Sprintf("  {id: \"%s\", amount: %d, reason: \"%s\"}\r\n", element.ID, element.Amount, element.Reason)
-
 			}
 
 			fmt.Printf(
@@ -72,20 +68,42 @@ Stats
   Total Withdrawls: %d
 		  
   Total Balance: $%d
-		  
-Transactions
 -------------
-%s`, transTotal, transDeposit, transWithdrawl, totalBalance, transactionList)
+`, transTotal, transDeposit, transWithdrawl, totalBalance)
 		},
 	}
 	var cmdList = &cobra.Command{
-		Use:   "list",
-		Short: "List transactions",
+		Use:   "list <number to list> <starting offset>",
+		Short: "List a number (default of 10, can be any positive number or the string \"all\") of transactions.",
+		Args: cobra.MaximumNArgs(2),
+		DisableFlagParsing: true,
 		Run: func(cmd *cobra.Command, args []string) {
 			transactions := getAllTransactions()
+			var max int = 10
+			var start int = 0
+			var err
+			if (len(args) > 0) {
+				max, err = strconv.Atoi(args[0])
+				if err != nil {
+					// ... handle error
+					panic(err)
+				}
+			}
+			if (len(args) > 1) {
+				start, err = strconv.Atoi(args[1])
+				if err != nil {
+					// ... handle error
+					panic(err)
+				}
+			}
 
-			for index, element := range transactions {
-				fmt.Printf("Transaction %d: {id: \"%s\", amount: %d, reason: \"%s\"}\r\n", index, element.ID, element.Amount, element.Reason)
+			if max < 0 {
+				max = len(transactions) - start // if negative, print until end of array
+			}
+
+			for i := 0; i <= max && i <= len(transactions) - start - 1; i++ {
+				element := transactions[i + start]
+				fmt.Printf("Transaction %d: {id: \"%s\", amount: %d, reason: \"%s\"}\r\n", i + start, element.ID, element.Amount, element.Reason)
 			}
 		},
 	}
