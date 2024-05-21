@@ -15,6 +15,7 @@ var walletName = ".config/wallet.json"
 var walletMode = 0755
 var initalWallet = `{
 	"id": "0",
+	"version": "` + COMMANDMONEY_VER_STR + `",
 	"name": "Default Wallet",
 	"currentBalance": 0,
 	"transactions": []
