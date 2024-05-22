@@ -29,7 +29,7 @@ func main() {
 
 			tempTrans.Reason = args[1]
 
-			addTransaction(tempTrans)
+			AddTransaction(tempTrans)
 		},
 	}
 
@@ -37,8 +37,10 @@ func main() {
 		Use:   "info",
 		Short: "Show all information about the wallet.",
 		Run: func(cmd *cobra.Command, args []string) {
-			transactions := getAllTransactions()
+			transactions := GetAllTransactions()
 			transTotal := len(transactions)
+			upgrade := ShouldUpgradeWallet()
+			walletVersion := GetWalletVersion()
 
 			var transDeposit int
 			var transWithdrawl int
@@ -60,6 +62,9 @@ func main() {
   COMMAND WALLET
 ##################
 
+Wallet Version: %s
+CommandMoney Version: %s
+Should Upgrade Wallet? %t
 
 Stats
 -------
@@ -69,7 +74,7 @@ Stats
 		  
   Total Balance: $%d
 -------------
-`, transTotal, transDeposit, transWithdrawl, totalBalance)
+`, walletVersion, COMMANDMONEY_VER_STR, upgrade, transTotal, transDeposit, transWithdrawl, totalBalance)
 		},
 	}
 	var cmdList = &cobra.Command{
@@ -78,7 +83,7 @@ Stats
 		Args:               cobra.MaximumNArgs(2),
 		DisableFlagParsing: true,
 		Run: func(cmd *cobra.Command, args []string) {
-			transactions := getAllTransactions()
+			transactions := GetAllTransactions()
 			var max int = 10
 			var start int = 0
 			var err error
