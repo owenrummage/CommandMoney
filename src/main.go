@@ -14,7 +14,7 @@ func main() {
 		Use:                "log <amount> <reason>",
 		Short:              "Log money coming in or out of the account",
 		Long:               `Logs the money coming in or out of your account with a reason listed.`,
-		Args:               cobra.ExactArgs(1),
+		Args:               cobra.ExactArgs(2),
 		DisableFlagParsing: true,
 		Run: func(cmd *cobra.Command, args []string) {
 			var tempTrans Transaction
