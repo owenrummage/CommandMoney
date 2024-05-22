@@ -13,7 +13,7 @@ var dataPath = ""
 var decoded Wallet
 var walletName = ".config/wallet.json"
 var walletMode = 0755
-var initalWallet = `{
+var initialWallet = `{
 	"id": "0",
 	"version": "` + COMMANDMONEY_VER_STR + `",
 	"name": "Default Wallet",
@@ -55,7 +55,7 @@ func InitDatastore() {
 		fmt.Println("Data does not exist. Initializing with default configuration.")
 		createWallet()
 
-		data = []byte(initalWallet)
+		data = []byte(initialWallet)
 	} else if err != nil {
 		panic("Unable to read data file: " + err.Error())
 	}
@@ -77,7 +77,7 @@ func encodeData() []byte {
 
 }
 func createWallet() {
-	var err = os.WriteFile(dataPath, []byte(initalWallet), fs.FileMode(walletMode))
+	var err = os.WriteFile(dataPath, []byte(initialWallet), fs.FileMode(walletMode))
 	if err != nil {
 		panic("Unable to write to data file: " + err.Error())
 	}
