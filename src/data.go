@@ -27,6 +27,12 @@ type Transaction struct {
 	Reason string `json:"reason"`
 }
 
+type Wallet_v000 struct {
+	ID             string        `json:"id"`
+	Name           string        `json:"name"`
+	CurrentBalance int           `json:"currentBalance"`
+	Transactions   []Transaction `json:"transactions"`
+}
 type Wallet struct {
 	ID             string        `json:"id"`
 	Name           string        `json:"name"`
@@ -95,13 +101,16 @@ func writeData(data []byte) {
 
 func AddTransaction(transaction Transaction) {
 	decoded.Transactions = append(decoded.Transactions, transaction)
-	var encoded = encodeData()
-	writeData(encoded)
+	writeData(encodeData())
 }
 
 func GetAllTransactions() []Transaction {
 	return decoded.Transactions
 }
 func GetWalletVersion() string {
-	return decoded.Version
+	var ver string = decoded.Version
+	if decoded.Version == "" {
+		ver = "v0.0.0"
+	}
+	return ver
 }

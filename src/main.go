@@ -11,10 +11,10 @@ import (
 func main() {
 
 	var cmdLog = &cobra.Command{
-		Use:                "log [amount] [reason]",
+		Use:                "log <amount> <reason>",
 		Short:              "Log money coming in or out of the account",
 		Long:               `Logs the money coming in or out of your account with a reason listed.`,
-		Args:               cobra.RangeArgs(2, 2),
+		Args:               cobra.ExactArgs(1),
 		DisableFlagParsing: true,
 		Run: func(cmd *cobra.Command, args []string) {
 			var tempTrans Transaction
@@ -78,7 +78,7 @@ Stats
 		},
 	}
 	var cmdList = &cobra.Command{
-		Use:                "list <number to list> <starting offset>",
+		Use:                "list [number to list] [starting offset]",
 		Short:              "List a number (default of 10, can be any positive number or the string \"all\") of transactions.",
 		Args:               cobra.MaximumNArgs(2),
 		DisableFlagParsing: true,
@@ -115,8 +115,22 @@ Stats
 	var cmdVer = &cobra.Command{
 		Use:   "version",
 		Short: "Print the version",
+		Args:  cobra.MaximumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
+
 			fmt.Printf("CommandMoney %s\r\n", COMMANDMONEY_VER_STR)
+		},
+	}
+	var cmdUpgrade = &cobra.Command{
+		Use:   "upgrade [version to stop at]",
+		Short: "Upgrade the wallet version, optionally stopping at a version",
+		Run: func(cmd *cobra.Command, args []string) {
+			var maxVer string = ""
+			if len(args) > 0 {
+				maxVer = args[0]
+			}
+
+			doUpgrade(maxVer)
 		},
 	}
 
@@ -126,7 +140,7 @@ Stats
 		Short:   "CommandMoney is an efficient money management program written in Go.",
 	}
 	rootCmd.SetVersionTemplate("CommandMoney " + COMMANDMONEY_VER_STR + "\r\n")
-	rootCmd.AddCommand(cmdLog, cmdInfo, cmdList, cmdVer)
+	rootCmd.AddCommand(cmdLog, cmdInfo, cmdList, cmdVer, cmdUpgrade)
 	InitDatastore()
 	rootCmd.Execute()
 }
